@@ -7,6 +7,7 @@ def main(global_config, **settings):
     """
     config = Configurator(settings=settings)
     config.include(pyramid_zcml)
+    config.hook_zca()
     config.load_zcml('configure.zcml')
 
     return config.make_wsgi_app()

@@ -46,6 +46,7 @@ setup(name='ftw.bridge.proxy',
           'setuptools',
           'pyramid',
           'pyramid_zcml',
+          'zope.component',
       ],
 
       tests_require=tests_require,
