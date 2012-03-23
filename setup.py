@@ -46,10 +46,13 @@ setup(name='ftw.bridge.proxy',
           'setuptools',
           'pyramid',
       ],
+
       tests_require=tests_require,
       extras_require=extras_require,
 
       entry_points='''
       # -*- Entry points: -*-
+      [paste.app_factory]
+      main = ftw.bridge.proxy:main
       ''',
       )
