@@ -27,8 +27,9 @@ class IAuthorizationPlugin(Interface):
         """The ``IAuthorizationPlugin`` adapts the ``request``.
         """
 
-    def is_authorized():
+    def is_authorized(client):
         """Returns `True` if the request is authorized, otherwise ``False``.
+        The origin ``client`` info is passed as dict.
         """
 
 
