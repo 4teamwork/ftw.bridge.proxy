@@ -3,6 +3,11 @@
     <include package="pyramid_zcml" />
 
     <adapter
+        factory="ftw.bridge.proxy.authorization.AuthorizationManager"
+        provides="ftw.bridge.proxy.interfaces.IAuthorizationManager"
+        />
+
+    <adapter
         factory="ftw.bridge.proxy.authorization.DefaultAuthorizationPlugin"
         provides="ftw.bridge.proxy.interfaces.IAuthorizationPlugin"
         name=""
