@@ -45,6 +45,7 @@ setup(name='ftw.bridge.proxy',
       install_requires=[
           'setuptools',
           'pyramid',
+          'pyramid_zcml',
       ],
 
       tests_require=tests_require,
