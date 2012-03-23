@@ -5,9 +5,8 @@ version = '1.0dev'
 maintainer = 'Jonas Baumann'
 
 tests_require = [
-    'mocker',
     'plone.testing',
-    'unittest2',
+    'ftw.testing',
     ]
 
 extras_require = {
