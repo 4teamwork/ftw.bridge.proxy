@@ -23,4 +23,9 @@
         provides="ftw.bridge.proxy.interfaces.IProxy"
         />
 
+    <view
+        view="ftw.bridge.proxy.views.ProxyView"
+        name="proxy"
+        />
+
 </configure>
