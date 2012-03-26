@@ -18,7 +18,6 @@ from zope.interface import Interface
 from zope.interface.verify import verifyClass
 
 
-
 class TestAuthorizationManager(TestCase):
 
     layer = PYRAMID_LAYER

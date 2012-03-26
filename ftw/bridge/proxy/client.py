@@ -51,7 +51,6 @@ class ClientManager(object):
             return value.strip()
 
 
-
 class Client(object):
 
     implements(IClient)
