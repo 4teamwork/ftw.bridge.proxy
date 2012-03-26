@@ -160,3 +160,9 @@ class TestDefaultAuthorization(TestCase):
         auth = queryAdapter(request, IAuthorizationPlugin)
 
         self.assertTrue(auth.is_authorized(self.client_foo))
+
+    def test_is_authorized_without_remote_address(self):
+        request = DummyRequest()
+        auth = queryAdapter(request, IAuthorizationPlugin)
+
+        self.assertFalse(auth.is_authorized(self.client_foo))
