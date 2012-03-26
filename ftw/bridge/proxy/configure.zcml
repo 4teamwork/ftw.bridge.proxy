@@ -13,7 +13,7 @@
         name=""
         />
 
-    <adapter
+    <utility
         factory="ftw.bridge.proxy.client.ClientManager"
         provides="ftw.bridge.proxy.interfaces.IClientManager"
         />

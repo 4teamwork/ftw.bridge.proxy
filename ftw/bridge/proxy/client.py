@@ -1,15 +1,11 @@
 from ftw.bridge.proxy.interfaces import IClientManager
-from pyramid.interfaces import IRequest
-from zope.component import adapts
+from pyramid.interfaces import ISettings
+from zope.component import getUtility
 from zope.interface import implements
 
 
 class ClientManager(object):
     implements(IClientManager)
-    adapts(IRequest)
-
-    def __init__(self, request):
-        self.request = request
 
     def get_clients(self):
         return self._parse_clients()
@@ -24,8 +20,9 @@ class ClientManager(object):
 
     def _parse_clients(self):
         clients = {}
+        settings = getUtility(ISettings)
 
-        for key, value in self.request.registry.settings.items():
+        for key, value in settings.items():
             if key.startswith('clients.'):
                 prefix_, clientid, option = key.split('.')
 

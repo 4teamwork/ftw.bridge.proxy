@@ -5,6 +5,7 @@ from pyramid.exceptions import Forbidden
 from pyramid.interfaces import IRequest
 from zope.component import adapts
 from zope.component import getAdapter
+from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface import implements
 
@@ -34,7 +35,7 @@ class AuthorizationManager(object):
         if origin is None:
             raise Forbidden()
 
-        client = IClientManager(self.request).get_client_by_id(origin)
+        client = getUtility(IClientManager).get_client_by_id(origin)
         if client is None:
             raise Forbidden()
 

@@ -34,13 +34,9 @@ class IAuthorizationPlugin(Interface):
 
 
 class IClientManager(Interface):
-    """The client manager provides information about configured clients.
-    It adapts the request.
+    """The client manager utility provides information about configured
+    clients.
     """
-
-    def __init__(request):
-        """The ``IClientManager`` adapts the ``request``.
-        """
 
     def get_clients():
         """Returns a list of clients. Each client is represented as dict.
