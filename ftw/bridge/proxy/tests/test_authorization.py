@@ -1,3 +1,6 @@
+# pylint: disable=W0212
+# W0212: Access to a protected member of a client class
+
 from ftw.bridge.proxy.authorization import AuthorizationManager
 from ftw.bridge.proxy.authorization import DefaultAuthorizationPlugin
 from ftw.bridge.proxy.interfaces import IAuthorizationManager
