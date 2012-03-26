@@ -15,6 +15,9 @@ class PyramidLayer(Layer):
             'clients.bar.ip_addresses': '127.0.0.1, 127.0.0.3',
             'clients.bar.internal_url': 'http://127.0.0.1:9080/bar/',
             'clients.bar.public_url': 'http://localhost:9080/bar/',
+
+            'bridge.admin.username': 'chef',
+            'bridge.admin.password': '1234',
             }
 
         self.config = testing.setUp(hook_zca=True, settings=settings)
