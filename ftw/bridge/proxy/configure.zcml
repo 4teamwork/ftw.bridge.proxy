@@ -18,4 +18,9 @@
         provides="ftw.bridge.proxy.interfaces.IClientManager"
         />
 
+    <adapter
+        factory="ftw.bridge.proxy.proxy.Proxy"
+        provides="ftw.bridge.proxy.interfaces.IProxy"
+        />
+
 </configure>

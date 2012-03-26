@@ -75,3 +75,20 @@ class IClient(Interface):
     def set_maintenance_mode(offline):
         """Sets the maintenance mode for this client.
         """
+
+
+class IProxy(Interface):
+    """The proxy adapter adapts ``request`` and ``client``. It creates the
+    request to the adapted target client and proxies the data from the
+    request.
+    """
+
+    def __init__(request):
+        """
+        Attributes:
+        ``request`` -- the incoming request to be passed.
+        """
+
+    def __call__():
+        """Executes the request to the target client and returns its response.
+        """
