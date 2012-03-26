@@ -1,3 +1,4 @@
+from zope.interface import Attribute
 from zope.interface import Interface
 
 
@@ -44,4 +45,33 @@ class IClientManager(Interface):
 
     def get_client_by_id(clientid):
         """Returns the dict of a client configuration.
+        """
+
+
+class IClient(Interface):
+    """Represents a client configuration. Clients are managed by the
+    ``IClientManager``.
+
+    The configuration is read from the pyramid configuration file (ini).
+    """
+
+    clientid = Attribute('ID of the client.')
+    aliases = Attribute('List of alias clientids of this client.')
+    ip_addresses = Attribute('IP addresses of this client for authorization.')
+    internal_url = Attribute(
+        'URL which the bridge uses to contact the client internally.')
+    public_url = Attribute('URL for user redirection, not used internally.')
+
+    def __init__(clientid, ip_addresses, internal_url, public_url,
+                 aliases=None):
+        """Creates a new client object.
+        """
+
+    def is_in_maintenance_mode():
+        """Returns ``True`` if the client is in maintenance mode, otherwise
+        ``False``.
+        """
+
+    def set_maintenance_mode(offline):
+        """Sets the maintenance mode for this client.
         """

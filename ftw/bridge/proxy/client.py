@@ -1,3 +1,4 @@
+from ftw.bridge.proxy.interfaces import IClient
 from ftw.bridge.proxy.interfaces import IClientManager
 from pyramid.interfaces import ISettings
 from zope.component import getUtility
@@ -7,16 +8,26 @@ from zope.interface import implements
 class ClientManager(object):
     implements(IClientManager)
 
+    def __init__(self):
+        self._clients = None
+
     def get_clients(self):
-        return self._parse_clients()
+        if self._clients is None:
+            self._load_clients()
+        return self._clients
 
     def get_client_by_id(self, clientid):
-        for client in self.get_clients().values():
-            if clientid == client['clientid'] or \
-                    clientid in client.get('aliases', []):
+        for client in self.get_clients():
+            if client.clientid == clientid or \
+                    clientid in client.aliases:
                 return client
 
         return None
+
+    def _load_clients(self):
+        self._clients = []
+        for clientdata in self._parse_clients().values():
+            self._clients.append(Client(**clientdata))
 
     def _parse_clients(self):
         clients = {}
@@ -38,3 +49,32 @@ class ClientManager(object):
             return [val.strip() for val in value.strip().split(',')]
         else:
             return value.strip()
+
+
+
+class Client(object):
+
+    implements(IClient)
+
+    def __init__(self, clientid, ip_addresses, internal_url, public_url,
+                 aliases=None):
+        if not aliases:
+            aliases = []
+
+        self.clientid = clientid
+        self.ip_addresses = ip_addresses
+        self.internal_url = internal_url
+        self.public_url = public_url
+        self.aliases = aliases
+        self._offline_for_maintenance = False
+
+    def is_in_maintenance_mode(self):
+        """Returns ``True`` if the client is in maintenance mode, otherwise
+        ``False``.
+        """
+        return self._offline_for_maintenance
+
+    def set_maintenance_mode(self, offline):
+        """Sets the maintenance mode for this client.
+        """
+        self._offline_for_maintenance = offline

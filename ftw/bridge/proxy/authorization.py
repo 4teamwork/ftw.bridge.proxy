@@ -19,7 +19,7 @@ class AuthorizationManager(object):
 
     def authorize(self):
         client = self._get_client()
-        plugin = self._get_authorization_plugin(client['clientid'])
+        plugin = self._get_authorization_plugin(client.clientid)
 
         if plugin.is_authorized(client) != True:
             raise Forbidden()
@@ -59,7 +59,7 @@ class DefaultAuthorizationPlugin(object):
         self._client = None
 
     def is_authorized(self, client):
-        return self._get_request_ip() in client['ip_addresses']
+        return self._get_request_ip() in client.ip_addresses
 
     def _get_request_ip(self):
         """Returns the IP address of the host which sent the request initally.

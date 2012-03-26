@@ -2,13 +2,14 @@ from ftw.bridge.proxy.authorization import AuthorizationManager
 from ftw.bridge.proxy.authorization import DefaultAuthorizationPlugin
 from ftw.bridge.proxy.interfaces import IAuthorizationManager
 from ftw.bridge.proxy.interfaces import IAuthorizationPlugin
-from ftw.bridge.proxy.testing import CLIENT_FOO
+from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.testing import PYRAMID_LAYER
 from mocker import Mocker, expect
 from pyramid.exceptions import Forbidden
 from pyramid.testing import DummyRequest
 from pyramid.threadlocal import get_current_registry
 from unittest2 import TestCase
+from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
@@ -46,7 +47,9 @@ class TestAuthorizationManager(TestCase):
     def test_get_client(self):
         request = DummyRequest(headers={'X-BRIDGE-ORIGIN': 'foo'})
         manager = queryAdapter(request, IAuthorizationManager)
-        self.assertEqual(manager._get_client(), CLIENT_FOO)
+        client = manager._get_client()
+        self.assertNotEqual(client, None)
+        self.assertEqual(client.clientid, 'foo')
 
     def test_get_client_with_invalid_request(self):
         request = DummyRequest()
@@ -63,12 +66,14 @@ class TestAuthorizationManager(TestCase):
             manager._get_client()
 
     def test_authorize_raises_forbidden_when_plugin_returns_False(self):
+        clientmanager = getUtility(IClientManager)
+        client = clientmanager.get_client_by_id('foo')
         mocker = Mocker()
         request = DummyRequest(headers={'X-BRIDGE-ORIGIN': 'foo'})
 
         plugin = mocker.mock()
         expect(plugin(request)).result(plugin)
-        expect(plugin.is_authorized(CLIENT_FOO)).result(False)
+        expect(plugin.is_authorized(client)).result(False)
         sm = get_current_registry()
         sm.registerAdapter(plugin, [Interface], IAuthorizationPlugin,
                            name='foo', event=False)
@@ -83,12 +88,14 @@ class TestAuthorizationManager(TestCase):
         mocker.verify()
 
     def test_authorized_when_plugin_returns_True(self):
+        clientmanager = getUtility(IClientManager)
+        client = clientmanager.get_client_by_id('foo')
         mocker = Mocker()
         request = DummyRequest(headers={'X-BRIDGE-ORIGIN': 'foo'})
 
         plugin = mocker.mock()
         expect(plugin(request)).result(plugin)
-        expect(plugin.is_authorized(CLIENT_FOO)).result(True)
+        expect(plugin.is_authorized(client)).result(True)
         sm = get_current_registry()
         sm.registerAdapter(plugin, [Interface], IAuthorizationPlugin,
                            name='foo', event=False)
@@ -106,6 +113,10 @@ class TestDefaultAuthorization(TestCase):
 
     layer = PYRAMID_LAYER
 
+    def setUp(self):
+        clientmanager = getUtility(IClientManager)
+        self.client_foo = clientmanager.get_client_by_id('foo')
+
     def test_component_is_registered(self):
         request = DummyRequest()
         auth = queryAdapter(request, IAuthorizationPlugin)
@@ -122,7 +133,7 @@ class TestDefaultAuthorization(TestCase):
             environ={'REMOTE_ADDR': '192.168.1.1'})
         auth = queryAdapter(request, IAuthorizationPlugin)
 
-        self.assertFalse(auth.is_authorized(CLIENT_FOO))
+        self.assertFalse(auth.is_authorized(self.client_foo))
 
     def test_is_authorized_from_correct_ip(self):
         request = DummyRequest(
@@ -130,7 +141,7 @@ class TestDefaultAuthorization(TestCase):
             environ={'REMOTE_ADDR': '127.0.0.1'})
         auth = queryAdapter(request, IAuthorizationPlugin)
 
-        self.assertTrue(auth.is_authorized(CLIENT_FOO))
+        self.assertTrue(auth.is_authorized(self.client_foo))
 
     def test_is_authorized_from_bad_proxy_ip(self):
         request = DummyRequest(
@@ -139,7 +150,7 @@ class TestDefaultAuthorization(TestCase):
                      'HTTP_X_FORWARDED_FOR': '192.168.1.1'})
         auth = queryAdapter(request, IAuthorizationPlugin)
 
-        self.assertFalse(auth.is_authorized(CLIENT_FOO))
+        self.assertFalse(auth.is_authorized(self.client_foo))
 
     def test_is_authorized_multi_proxied_ip(self):
         request = DummyRequest(
@@ -148,4 +159,4 @@ class TestDefaultAuthorization(TestCase):
                      'HTTP_X_FORWARDED_FOR': '127.0.0.1, 192.168.10.10'})
         auth = queryAdapter(request, IAuthorizationPlugin)
 
-        self.assertTrue(auth.is_authorized(CLIENT_FOO))
+        self.assertTrue(auth.is_authorized(self.client_foo))
