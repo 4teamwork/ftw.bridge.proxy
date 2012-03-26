@@ -28,4 +28,9 @@
         name="proxy"
         />
 
+    <view
+        view="ftw.bridge.proxy.views.ManageView"
+        name="manage"
+        />
+
 </configure>

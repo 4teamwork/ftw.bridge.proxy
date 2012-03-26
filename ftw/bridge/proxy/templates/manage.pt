@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Bridge management</title>
+    </head>
+    <body>
+
+        <h1>Clients:</h1>
+
+        <table border="1" cellpadding="2" cellspacing="0" bordercolor="grey">
+            <thead>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Internal URL</th>
+                <th>Public URL</th>
+                <th>Aliases</th>
+                <th>IP-Addresses</th>
+            </thead>
+
+            <tbody>
+                <tr tal:repeat="client clients">
+                    <td tal:content="client.clientid" />
+                    <td tal:define="offline python: client.is_in_maintenance_mode();
+                                    url string:manage?clientid=${client.clientid}">
+                        <a tal:condition="offline"
+                           tal:attributes="href string:${url}&amp;status=online"
+                           style="color: red;">
+                            Maintenance
+                        </a>
+                        <a tal:condition="not:offline"
+                           tal:attributes="href string:${url}&amp;status=maintenance"
+                           style="color: green;">
+                            Online
+                        </a>
+                    </td>
+                    <td tal:content="python: ', '.join(client.aliases)" />
+                    <td tal:content="python: ', '.join(client.ip_addresses)"/>
+                    <td tal:content="client.internal_url" />
+                    <td>
+                        <a tal:attributes="href client.public_url"
+                           tal:content="client.public_url" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </body>
+</html>
