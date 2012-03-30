@@ -27,7 +27,7 @@ class Proxy(object):
                                     data=self.request.body,
                                     headers=self.request.headers)
 
-        return Response(body=response.raw,
+        return Response(body=response.raw.read(),
                         status=response.status_code)
 
     def _get_target_url(self):

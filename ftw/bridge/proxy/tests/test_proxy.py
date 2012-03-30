@@ -1,3 +1,4 @@
+from StringIO import StringIO
 from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.interfaces import IProxy
 from ftw.bridge.proxy.proxy import Proxy
@@ -47,7 +48,7 @@ class TestProxy(MockerTestCase):
 
         response = Response()
         response.status_code = 200
-        response.raw = 'the response data'
+        response.raw = StringIO('the response data')
 
         self.expect(self.requests.request(
                 'get',
@@ -77,7 +78,7 @@ class TestProxy(MockerTestCase):
 
         response = Response()
         response.status_code = 200
-        response.raw = 'the response data'
+        response.raw = StringIO('the response data')
 
         self.expect(self.requests.request(
                 'post',
