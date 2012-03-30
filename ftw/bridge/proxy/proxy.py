@@ -39,8 +39,8 @@ class Proxy(object):
         if subpath.startswith('/'):
             subpath = subpath[1:]
 
-        # remove bridge client part
-        subpath = '/'.join(subpath.split('/')[1:])
+        # remove view name and bridge client part
+        subpath = '/'.join(subpath.split('/')[2:])
 
         return baseurl + '/' + subpath
 
@@ -50,7 +50,8 @@ class Proxy(object):
             if subpath.startswith('/'):
                 subpath = subpath[1:]
 
-            clientid = subpath.split('/')[0]
+            # 0 = "proxy", 1 = clientid, 2+ = path on client
+            clientid = subpath.split('/')[1]
 
             manager = getUtility(IClientManager)
             self._client = manager.get_client_by_id(clientid)

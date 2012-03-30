@@ -32,7 +32,7 @@ class TestProxyView(MockerTestCase):
 
     def test_proxy_view_authorizes(self):
         request = DummyRequest(
-            path='/foo/remote/path/@@view',
+            path='/proxy/foo/remote/path/@@view',
             headers={})
 
         self.mocker.replay()
@@ -42,7 +42,7 @@ class TestProxyView(MockerTestCase):
 
     def test_proxy_view(self):
         request = DummyRequest(
-            path='/foo/remote/path/@@view',
+            path='/proxy/foo/remote/path/@@view',
             params={'foo': 'bar'},
             headers={'X-BRIDGE-ORIGIN': 'bar',
                      'X-BRIDGE-AC': 'john.doe'},

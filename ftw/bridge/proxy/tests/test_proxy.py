@@ -40,7 +40,7 @@ class TestProxy(MockerTestCase):
 
     def test_GET_request(self):
         request = DummyRequest(
-            path='/bar/remote/path/@@view',
+            path='/proxy/bar/remote/path/@@view',
             params={'foo': 'bar'},
             headers={'X-BRIDGE-ORIGIN': 'foo',
                      'X-BRIDGE-AC': 'john.doe'})
@@ -68,7 +68,7 @@ class TestProxy(MockerTestCase):
 
     def test_POST_request(self):
         request = DummyRequest(
-            path='/foo/remote/path/@@view',
+            path='/proxy/foo/remote/path/@@view',
             params={'foo': 'bar'},
             headers={'X-BRIDGE-ORIGIN': 'bar',
                      'X-BRIDGE-AC': 'john.doe'},
@@ -102,7 +102,7 @@ class TestProxy(MockerTestCase):
         foo.set_maintenance_mode(True)
 
         request = DummyRequest(
-            path='/foo/remote/path/@@view',
+            path='/proxy/foo/remote/path/@@view',
             params={'foo': 'bar'},
             headers={'X-BRIDGE-ORIGIN': 'bar',
                      'X-BRIDGE-AC': 'john.doe'})
