@@ -1,6 +1,7 @@
 from StringIO import StringIO
 from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.interfaces import IProxy
+from ftw.bridge.proxy.interfaces import PORTAL_URL_PLACEHOLDER
 from ftw.bridge.proxy.proxy import Proxy
 from ftw.bridge.proxy.testing import PYRAMID_LAYER
 from mocker import ARGS, KWARGS
@@ -116,3 +117,36 @@ class TestProxy(MockerTestCase):
             proxy()
 
         foo.set_maintenance_mode(False)
+
+    def test_proxy_replaces_portal_url(self):
+        request = DummyRequest(
+            path='/proxy/bar/remote/path/@@view',
+            params={'foo': 'bar'},
+            headers={'X-BRIDGE-ORIGIN': 'foo',
+                     'X-BRIDGE-AC': 'john.doe'})
+
+        response = Response()
+        response.status_code = 200
+        response.raw = StringIO(
+            'response containing %s as a portal url placeholder.' % (
+                PORTAL_URL_PLACEHOLDER))
+
+        self.expect(self.requests.request(
+                'get',
+                'http://127.0.0.1:9080/bar/remote/path/@@view',
+                params={'foo': 'bar'},
+                data='',
+                headers={'X-BRIDGE-ORIGIN': 'foo',
+                         'X-BRIDGE-AC': 'john.doe'})).result(
+            response)
+
+        self.mocker.replay()
+        proxy = queryAdapter(request, IProxy)
+
+        response = proxy()
+        self.assertTrue(IResponse.providedBy(response))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(
+            response.body,
+            'response containing http://localhost:9080/bar/ as a portal '
+            'url placeholder.')

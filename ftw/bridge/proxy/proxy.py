@@ -1,5 +1,6 @@
 from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.interfaces import IProxy
+from ftw.bridge.proxy.interfaces import PORTAL_URL_PLACEHOLDER
 from pyramid.httpexceptions import HTTPServiceUnavailable
 from pyramid.interfaces import IRequest
 from pyramid.response import Response
@@ -27,7 +28,9 @@ class Proxy(object):
                                     data=self.request.body,
                                     headers=self.request.headers)
 
-        return Response(body=response.raw.read(),
+        data = self._replace_portal_url(response.raw.read())
+
+        return Response(body=data,
                         status=response.status_code)
 
     def _get_target_url(self):
@@ -56,3 +59,9 @@ class Proxy(object):
             manager = getUtility(IClientManager)
             self._client = manager.get_client_by_id(clientid)
         return self._client
+
+    def _replace_portal_url(self, data):
+        public_url = self._client.public_url
+        if not public_url.endswith('/'):
+            public_url = public_url + '/'
+        return data.replace(PORTAL_URL_PLACEHOLDER, public_url)

@@ -6,6 +6,9 @@ from zope.interface import Attribute
 from zope.interface import Interface
 
 
+PORTAL_URL_PLACEHOLDER = '***portal_url***'
+
+
 class IAuthorizationManager(Interface):
     """The authorization manager authorizes a request by delegating
     authorization to the ``IAuthorizationPlugin`` for the origin. If
