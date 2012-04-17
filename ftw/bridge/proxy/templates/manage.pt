@@ -10,10 +10,10 @@
             <thead>
                 <th>ID</th>
                 <th>Status</th>
-                <th>Internal URL</th>
-                <th>Public URL</th>
                 <th>Aliases</th>
                 <th>IP-Addresses</th>
+                <th>Internal URL</th>
+                <th>Public URL</th>
             </thead>
 
             <tbody>
