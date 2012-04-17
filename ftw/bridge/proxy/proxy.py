@@ -63,9 +63,13 @@ class Proxy(object):
                         status=response.status_code)
 
     def _get_target_url(self):
-        baseurl = self._get_target_client().get_internal_url()[:-1]
+        baseurl = self._get_target_client().get_internal_url()
+        if baseurl.endswith('/'):
+            baseurl = baseurl[:-1]
 
-        subpath = self.request.path[1:]
+        subpath = self.request.path
+        if subpath.startswith('/'):
+            subpath = subpath[1:]
 
         # remove view name and bridge client part
         subpath = '/'.join(subpath.split('/')[2:])
@@ -74,7 +78,9 @@ class Proxy(object):
 
     def _get_target_client(self):
         if self._target_client is None:
-            subpath = self.request.path[1:]
+            subpath = self.request.path
+            if subpath.startswith('/'):
+                subpath = subpath[1:]
 
             # 0 = "proxy", 1 = clientid, 2+ = path on client
             clientid = subpath.split('/')[1]
