@@ -23,7 +23,7 @@ def protected(fun):
         if not authorization:
             raise login_required
 
-        basic_, authorization = authorization.split(' ', 1)
+        _basic, authorization = authorization.split(' ', 1)
         username, password = authorization.decode('base64').split(':', 1)
 
         settings = getUtility(ISettings)

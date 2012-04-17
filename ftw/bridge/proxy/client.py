@@ -35,7 +35,7 @@ class ClientManager(object):
 
         for key, value in settings.items():
             if key.startswith('clients.'):
-                prefix_, clientid, option = key.split('.')
+                _prefix, clientid, option = key.split('.')
 
                 if clientid not in clients:
                     clients[clientid] = {'clientid': clientid}

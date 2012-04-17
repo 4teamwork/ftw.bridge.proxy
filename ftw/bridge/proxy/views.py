@@ -4,6 +4,7 @@ from ftw.bridge.proxy.interfaces import IProxy
 from ftw.bridge.proxy.utils import protected
 from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import render_to_response
+from zope.component import getAdapter
 from zope.component import getUtility
 
 
@@ -13,7 +14,8 @@ class ProxyView(object):
         self.request = request
 
     def __call__(self):
-        IAuthorizationManager(self.request).authorize()
+        auth_manager = getAdapter(self.request, IAuthorizationManager)
+        auth_manager.authorize()
         return IProxy(self.request)()
 
 
