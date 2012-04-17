@@ -88,3 +88,16 @@ class TestClient(TestCase):
         self.assertTrue(client.is_in_maintenance_mode())
         client.set_maintenance_mode(False)
         self.assertFalse(client.is_in_maintenance_mode())
+
+    def test_get_public_url_has_trailing_slash(self):
+        client = Client(None, None, None,
+                        public_url='http://public/host')
+
+        self.assertEquals(client.get_public_url(),
+                          'http://public/host/')
+
+        client = Client(None, None, None,
+                        public_url='http://public/host/')
+
+        self.assertEquals(client.get_public_url(),
+                          'http://public/host/')

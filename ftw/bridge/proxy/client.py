@@ -77,3 +77,11 @@ class Client(object):
         """Sets the maintenance mode for this client.
         """
         self._offline_for_maintenance = offline
+
+    def get_public_url(self):
+        """Returns the public url of the client with a trailing slash.
+        """
+        if not self.public_url.endswith('/'):
+            return self.public_url + '/'
+        else:
+            return self.public_url
