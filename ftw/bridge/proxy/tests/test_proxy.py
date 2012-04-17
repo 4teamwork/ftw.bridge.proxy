@@ -3,6 +3,7 @@ from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.interfaces import IProxy
 from ftw.bridge.proxy.interfaces import PORTAL_URL_PLACEHOLDER
 from ftw.bridge.proxy.proxy import Proxy
+from ftw.bridge.proxy.proxy import replace_placeholder_in_data
 from ftw.bridge.proxy.testing import PYRAMID_LAYER
 from mocker import ARGS, KWARGS
 from mocker import MockerTestCase
@@ -10,9 +11,31 @@ from pyramid.httpexceptions import HTTPServiceUnavailable
 from pyramid.interfaces import IResponse
 from pyramid.testing import DummyRequest
 from requests.models import Response
+from unittest2 import TestCase
 from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.interface.verify import verifyClass
+
+
+class TestReplacingPlaceholder(TestCase):
+
+    def test_replace_placeholder_in_data(self):
+        data = {
+            'foo': 'bar %s baz' % PORTAL_URL_PLACEHOLDER,
+            'bar': 2,
+            'baz': {
+                'sub': PORTAL_URL_PLACEHOLDER},
+            'barbaz': [PORTAL_URL_PLACEHOLDER],
+            'foobar': (PORTAL_URL_PLACEHOLDER,)}
+
+        replace_placeholder_in_data(data, 'THEURL')
+        self.assertEquals(data, {
+                'foo': 'bar THEURL baz',
+                'bar': 2,
+                'baz': {
+                    'sub': 'THEURL'},
+                'barbaz': ['THEURL'],
+                'foobar': ['THEURL']})
 
 
 class TestProxy(MockerTestCase):
@@ -150,3 +173,30 @@ class TestProxy(MockerTestCase):
             response.body,
             'response containing http://localhost:9080/bar/ as a portal '
             'url placeholder.')
+
+    def test_proxy_replaces_portal_url_in_data(self):
+        request = DummyRequest(
+            path='/proxy/bar/remote/path/@@view',
+            params={'foo': 'bar %s baz' % PORTAL_URL_PLACEHOLDER},
+            headers={'X-BRIDGE-ORIGIN': 'foo',
+                     'X-BRIDGE-AC': 'john.doe'})
+
+        response = Response()
+        response.status_code = 200
+        response.raw = StringIO('response')
+
+        self.expect(self.requests.request(
+                'get',
+                'http://127.0.0.1:9080/bar/remote/path/@@view',
+                params={'foo': 'bar http://localhost:8080/foo/ baz'},
+                data='',
+                headers={'X-BRIDGE-ORIGIN': 'foo',
+                         'X-BRIDGE-AC': 'john.doe'})).result(
+            response)
+
+        self.mocker.replay()
+        proxy = queryAdapter(request, IProxy)
+
+        response = proxy()
+        self.assertTrue(IResponse.providedBy(response))
+        self.assertEqual(response.status, '200 OK')

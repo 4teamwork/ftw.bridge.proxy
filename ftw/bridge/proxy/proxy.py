@@ -8,6 +8,26 @@ from zope.component import adapts
 from zope.component import getUtility
 from zope.interface import implements
 import requests
+import types
+
+
+def replace_placeholder_in_data(data, public_url):
+    if isinstance(data, types.StringType):
+        return data.replace(PORTAL_URL_PLACEHOLDER, public_url)
+
+    elif isinstance(data, types.DictType):
+        for key, value in data.items():
+            data[key] = replace_placeholder_in_data(value, public_url)
+        return data
+
+    elif isinstance(data, (types.ListType, types.TupleType)):
+        new = []
+        for value in data:
+            new.append(replace_placeholder_in_data(value, public_url))
+        return new
+
+    else:
+        return data
 
 
 class Proxy(object):
@@ -16,25 +36,32 @@ class Proxy(object):
 
     def __init__(self, request):
         self.request = request
-        self._client = None
+        self._target_client = None
+        self._source_client = None
 
     def __call__(self):
-        if self._get_client().is_in_maintenance_mode():
+        if self._get_target_client().is_in_maintenance_mode():
             raise HTTPServiceUnavailable()
+
+        params = self.request.params
+        replace_placeholder_in_data(
+            params, self._get_source_client().get_public_url())
 
         response = requests.request(self.request.method.lower(),
                                     self._get_target_url(),
-                                    params=self.request.params,
+                                    params=params,
                                     data=self.request.body,
                                     headers=self.request.headers)
 
-        data = self._replace_portal_url(response.raw.read())
+        body = response.raw.read().replace(
+            PORTAL_URL_PLACEHOLDER,
+            self._get_target_client().get_public_url())
 
-        return Response(body=data,
+        return Response(body=body,
                         status=response.status_code)
 
     def _get_target_url(self):
-        baseurl = self._get_client().internal_url
+        baseurl = self._get_target_client().internal_url
         if baseurl.endswith('/'):
             baseurl = baseurl[:-1]
 
@@ -47,8 +74,8 @@ class Proxy(object):
 
         return baseurl + '/' + subpath
 
-    def _get_client(self):
-        if self._client is None:
+    def _get_target_client(self):
+        if self._target_client is None:
             subpath = self.request.path
             if subpath.startswith('/'):
                 subpath = subpath[1:]
@@ -57,11 +84,12 @@ class Proxy(object):
             clientid = subpath.split('/')[1]
 
             manager = getUtility(IClientManager)
-            self._client = manager.get_client_by_id(clientid)
-        return self._client
+            self._target_client = manager.get_client_by_id(clientid)
+        return self._target_client
 
-    def _replace_portal_url(self, data):
-        public_url = self._client.public_url
-        if not public_url.endswith('/'):
-            public_url = public_url + '/'
-        return data.replace(PORTAL_URL_PLACEHOLDER, public_url)
+    def _get_source_client(self):
+        if self._source_client is None:
+            manager = getUtility(IClientManager)
+            client_id = self.request.headers.get('X-BRIDGE-ORIGIN')
+            self._source_client = manager.get_client_by_id(client_id)
+        return self._source_client
