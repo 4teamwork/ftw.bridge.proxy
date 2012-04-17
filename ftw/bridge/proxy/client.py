@@ -78,6 +78,14 @@ class Client(object):
         """
         self._offline_for_maintenance = offline
 
+    def get_internal_url(self):
+        """Returns the internal url of the client with a trailing slash.
+        """
+        if not self.internal_url.endswith('/'):
+            return self.internal_url + '/'
+        else:
+            return self.internal_url
+
     def get_public_url(self):
         """Returns the public url of the client with a trailing slash.
         """

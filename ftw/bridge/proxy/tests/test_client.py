@@ -101,3 +101,18 @@ class TestClient(TestCase):
 
         self.assertEquals(client.get_public_url(),
                           'http://public/host/')
+
+    def test_get_internal_url_has_trailing_slash(self):
+        client = Client(None, None,
+                        internal_url='http://internal/host',
+                        public_url=None)
+
+        self.assertEquals(client.get_internal_url(),
+                          'http://internal/host/')
+
+        client = Client(None, None,
+                        internal_url='http://internal/host/',
+                        public_url=None)
+
+        self.assertEquals(client.get_internal_url(),
+                          'http://internal/host/')
