@@ -4,6 +4,7 @@ from ftw.bridge.proxy.interfaces import PORTAL_URL_PLACEHOLDER
 from pyramid.httpexceptions import HTTPServiceUnavailable
 from pyramid.interfaces import IRequest
 from pyramid.response import Response
+from webob.multidict import NestedMultiDict
 from zope.component import adapts
 from zope.component import getUtility
 from zope.interface import implements
@@ -12,10 +13,10 @@ import types
 
 
 def replace_placeholder_in_data(data, public_url):
-    if isinstance(data, types.StringType):
+    if isinstance(data, types.StringTypes):
         return data.replace(PORTAL_URL_PLACEHOLDER, public_url)
 
-    elif isinstance(data, types.DictType):
+    elif isinstance(data, (types.DictType, NestedMultiDict)):
         for key, value in data.items():
             data[key] = replace_placeholder_in_data(value, public_url)
         return data
@@ -43,7 +44,8 @@ class Proxy(object):
         if self._get_target_client().is_in_maintenance_mode():
             raise HTTPServiceUnavailable()
 
-        params = self.request.params
+        params = dict(self.request.params)
+
         replace_placeholder_in_data(
             params, self._get_source_client().get_public_url())
 
