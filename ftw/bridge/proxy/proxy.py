@@ -52,7 +52,6 @@ class Proxy(object):
         response = requests.request(self.request.method.lower(),
                                     self._get_target_url(),
                                     params=params,
-                                    data=self.request.body,
                                     headers=self.request.headers)
 
         body = response.raw.read().replace(
