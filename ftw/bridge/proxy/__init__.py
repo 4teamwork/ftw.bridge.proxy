@@ -1,5 +1,9 @@
 from pyramid.config import Configurator
+import logging
 import pyramid_zcml
+
+
+LOG = logging.getLogger(__name__)
 
 
 def main(global_config, **settings):

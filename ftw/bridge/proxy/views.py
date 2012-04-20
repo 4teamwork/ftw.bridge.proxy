@@ -1,3 +1,4 @@
+from ftw.bridge.proxy import LOG
 from ftw.bridge.proxy.interfaces import IAuthorizationManager
 from ftw.bridge.proxy.interfaces import IClientManager
 from ftw.bridge.proxy.interfaces import IProxy
@@ -14,6 +15,22 @@ class ProxyView(object):
         self.request = request
 
     def __call__(self):
+        origin = self.request.headers.get('X-BRIDGE-ORIGIN', None)
+        url = self.request.url
+        try:
+            response = self._handle()
+
+        except Exception, exc:
+            LOG.error('"%s" FAILED (%s): %s' % (
+                    origin, url, str(exc)))
+            raise
+
+        else:
+            LOG.info('"%s" %s (%s)' % (
+                    origin, response.status, url))
+            return response
+
+    def _handle(self):
         auth_manager = getAdapter(self.request, IAuthorizationManager)
         auth_manager.authorize()
         return IProxy(self.request)()
@@ -31,6 +48,8 @@ class ManageView(object):
             status = self.request.params.get('status', 'online')
             client = getUtility(IClientManager).get_client_by_id(clientid)
             client.set_maintenance_mode(status == 'maintenance')
+            LOG.info('manage: change status of %s to %s' % (
+                    clientid, status))
             return HTTPFound(location='/manage')
 
         return render_to_response(
