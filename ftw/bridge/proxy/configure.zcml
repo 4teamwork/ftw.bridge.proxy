@@ -33,4 +33,9 @@
         name="manage"
         />
 
+    <view
+        view="ftw.bridge.proxy.views.StatusCheckView"
+        name="statuscheck"
+        />
+
 </configure>

@@ -5,6 +5,7 @@ from ftw.bridge.proxy.interfaces import IProxy
 from ftw.bridge.proxy.utils import protected
 from pyramid.httpexceptions import HTTPFound
 from pyramid.renderers import render_to_response
+from pyramid.response import Response
 from zope.component import getAdapter
 from zope.component import getUtility
 
@@ -59,3 +60,15 @@ class ManageView(object):
 
     def get_clients(self):
         return getUtility(IClientManager).get_clients()
+
+
+class StatusCheckView(object):
+    """This view is used for status check, such as by supervisor.
+    It always returns 'OK'.
+    """
+
+    def __init__(self, request):
+        self.request = request
+
+    def __call__(self):
+        return Response('OK')
