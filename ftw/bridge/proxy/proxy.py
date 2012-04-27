@@ -49,10 +49,15 @@ class Proxy(object):
         replace_placeholder_in_data(
             params, self._get_source_client().get_public_url())
 
+        kwargs = {'headers': self.request.headers}
+        if self.request.method.lower() == 'get':
+            kwargs['params'] = params
+        else:
+            kwargs['data'] = params
+
         response = requests.request(self.request.method.lower(),
                                     self._get_target_url(),
-                                    data=params,
-                                    headers=self.request.headers)
+                                    **kwargs)
 
         body = response.raw.read().replace(
             PORTAL_URL_PLACEHOLDER,

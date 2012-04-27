@@ -77,7 +77,7 @@ class TestProxy(MockerTestCase):
         self.expect(self.requests.request(
                 'get',
                 'http://127.0.0.1:9080/bar/remote/path/@@view',
-                data={'foo': 'bar'},
+                params={'foo': 'bar'},
                 headers={'X-BRIDGE-ORIGIN': 'foo',
                          'X-BRIDGE-AC': 'john.doe'})).result(
             response)
@@ -104,7 +104,7 @@ class TestProxy(MockerTestCase):
         self.expect(self.requests.request(
                 'get',
                 'http://127.0.0.1:9080/bar/remote/path/@@view',
-                data={'foo': 'bar'},
+                params={'foo': 'bar'},
                 headers={'X-BRIDGE-ORIGIN': 'foo',
                          'X-BRIDGE-AC': 'john.doe'})).result(
             response)
@@ -178,7 +178,7 @@ class TestProxy(MockerTestCase):
         self.expect(self.requests.request(
                 'get',
                 'http://127.0.0.1:9080/bar/remote/path/@@view',
-                data={'foo': 'bar'},
+                params={'foo': 'bar'},
                 headers={'X-BRIDGE-ORIGIN': 'foo',
                          'X-BRIDGE-AC': 'john.doe'})).result(
             response)
@@ -208,7 +208,7 @@ class TestProxy(MockerTestCase):
         self.expect(self.requests.request(
                 'get',
                 'http://127.0.0.1:9080/bar/remote/path/@@view',
-                data={'foo': 'bar http://localhost:8080/foo/ baz'},
+                params={'foo': 'bar http://localhost:8080/foo/ baz'},
                 headers={'X-BRIDGE-ORIGIN': 'foo',
                          'X-BRIDGE-AC': 'john.doe'})).result(
             response)
