@@ -22,12 +22,13 @@ class ProxyView(object):
             response = self._handle()
 
         except Exception, exc:
-            LOG.error('"%s" FAILED (%s): %s: %s' % (
-                    origin, url, type(exc).__name__, str(exc)))
+            LOG.error('%s: "%s" FAILED (%s): %s: %s' % (
+                    self.request.method, origin, url, type(exc).__name__, str(exc)))
             raise
 
         else:
-            LOG.info('"%s" %s (%s)' % (
+            LOG.info('%s: "%s" %s (%s)' % (
+                    self.request.method,
                     origin, response.status, url))
             return response
 

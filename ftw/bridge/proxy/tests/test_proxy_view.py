@@ -116,7 +116,7 @@ class TestProxyViewLogging(MockerTestCase):
         self.assertEqual(response.body, 'proxied response')
         self.assertEqual(
             self.read_log().strip(),
-            'INFO "bar" 200 OK (%s)' % url)
+            'INFO GET: "bar" 200 OK (%s)' % url)
 
     def test_forbidden_request_logged(self):
         url = 'http://bridge/proxy/foo/remote/path/@@view'
@@ -134,5 +134,5 @@ class TestProxyViewLogging(MockerTestCase):
 
         self.assertEqual(
             self.read_log().strip(),
-            'ERROR "wrong-client" FAILED (%s): ' % url + \
+            'ERROR GET: "wrong-client" FAILED (%s): ' % url + \
                 'HTTPForbidden: Access was denied to this resource.')
