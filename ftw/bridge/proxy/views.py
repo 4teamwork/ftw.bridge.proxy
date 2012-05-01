@@ -52,7 +52,7 @@ class ManageView(object):
             client.set_maintenance_mode(status == 'maintenance')
             LOG.info('manage: change status of %s to %s' % (
                     clientid, status))
-            return HTTPFound(location='/manage')
+            return HTTPFound(location=self.request.headers.get('Referer'))
 
         return render_to_response(
             'ftw.bridge.proxy:templates/manage.pt',

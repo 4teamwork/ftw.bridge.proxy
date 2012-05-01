@@ -7,7 +7,8 @@ from unittest2 import TestCase
 
 
 AUTH_HEADERS = {
-    'Authorization': 'Basic %s' % 'chef:1234'.encode('base64')}
+    'Authorization': 'Basic %s' % 'chef:1234'.encode('base64'),
+    'Referer': 'http://bridge/manage'}
 
 
 class TestManageView(TestCase):
@@ -40,7 +41,7 @@ class TestManageView(TestCase):
                                        'status': 'maintenance'})
         response = ManageView(request)()
         self.assertTrue(isinstance(response, HTTPFound))
-        self.assertEqual(response.location, '/manage')
+        self.assertEqual(response.location, 'http://bridge/manage')
 
         # maintenance is active now
         request = DummyRequest(headers=AUTH_HEADERS)
@@ -52,7 +53,7 @@ class TestManageView(TestCase):
                                        'status': 'online'})
         response = ManageView(request)()
         self.assertTrue(isinstance(response, HTTPFound))
-        self.assertEqual(response.location, '/manage')
+        self.assertEqual(response.location, 'http://bridge/manage')
 
         # maintenance is not active anymore
         request = DummyRequest(headers=AUTH_HEADERS)
