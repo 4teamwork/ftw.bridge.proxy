@@ -73,6 +73,7 @@ class TestProxy(MockerTestCase):
         response = Response()
         response.status_code = 200
         response.raw = StringIO('the response data')
+        response.headers['content-length'] = 17
 
         self.expect(self.requests.request(
                 'get',

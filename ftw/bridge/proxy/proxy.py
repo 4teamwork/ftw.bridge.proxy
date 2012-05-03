@@ -63,8 +63,14 @@ class Proxy(object):
             PORTAL_URL_PLACEHOLDER,
             self._get_target_client().get_public_url())
 
-        return Response(body=body,
-                        status=response.status_code)
+        headers = dict(response.headers)
+        if 'content-length' in headers:
+            del headers['content-length']
+
+        proxy_response = Response(body=body,
+                                  status=response.status_code)
+        proxy_response.headers.update(headers)
+        return proxy_response
 
     def _get_target_url(self):
         baseurl = self._get_target_client().get_internal_url()
