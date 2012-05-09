@@ -5,7 +5,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add MANIFEST.in and include all resources.
+  [jone]
 
 
 1.1 (2012-05-09)
