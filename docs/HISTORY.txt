@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1 (unreleased)
+1.1 (2012-05-09)
 ----------------
 
 - Update readme (fix restructured text markup).
