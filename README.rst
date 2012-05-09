@@ -44,9 +44,9 @@ Installing the plone addon
 --------------------------
 
 For interacting with the bridge there is a plone addon package named
-``ftw.bridge.client``_, providing a PAS plugin for authenticating requests
+`ftw.bridge.client`_, providing a PAS plugin for authenticating requests
 from the bridge and providing tools for making requests. See the readme of
-``ftw.bridge.client``_ for more details.
+`ftw.bridge.client`_ for more details.
 
 
 Links
