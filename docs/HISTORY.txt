@@ -1,7 +1,9 @@
 Changelog
 =========
 
+
 1.0dev (unreleased)
 -------------------
 
-- Initial release
+- Initial implementation
+  [jone]
