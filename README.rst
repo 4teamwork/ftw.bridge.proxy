@@ -11,7 +11,7 @@ Maintenance mode
 ----------------
 
 Each configured client (plone site) can be switched into maintenance mode on
-the bridge. The when maintenance mode is enabled, the bridge returns every
+the bridge. When maintenance mode is enabled, the bridge answers every
 request to this client with a HTTP 503 (Service Unavailable).
 
 The maintenance mode can be enabled in the manage view of the bridge
@@ -44,9 +44,9 @@ Installing the plone addon
 --------------------------
 
 For interacting with the bridge there is a plone addon package named
-``ftw.bridge.client``, providing a PAS plugin for authenticating requests
+``ftw.bridge.client``_, providing a PAS plugin for authenticating requests
 from the bridge and providing tools for making requests. See the readme of
-``ftw.bridge.client`` for more details.
+``ftw.bridge.client``_ for more details.
 
 
 Links
@@ -55,7 +55,8 @@ Links
 - Main github project repository: https://github.com/4teamwork/ftw.bridge.proxy
 - Issue tracker: https://github.com/4teamwork/ftw.bridge.proxy/issues
 - Package on pypi: http://pypi.python.org/pypi/ftw.bridge.proxy
-- Continuous integration: https://jenkins.4teamwork.ch/job/ftw.bridge.proxy/
+- Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.bridge.proxy
+
 
 Copyright
 ---------
@@ -63,3 +64,5 @@ Copyright
 This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
 
 ``ftw.bridge.proxy`` is licensed under GNU General Public License, version 2.
+
+.. _ftw.bridge.client: https://github.com/4teamwork/ftw.bridge.client
