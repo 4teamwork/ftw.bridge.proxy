@@ -23,7 +23,8 @@ class ProxyView(object):
 
         except Exception, exc:
             LOG.error('%s: "%s" FAILED (%s): %s: %s' % (
-                    self.request.method, origin, url, type(exc).__name__, str(exc)))
+                    self.request.method, origin, url,
+                    type(exc).__name__, str(exc)))
             raise
 
         else:
