@@ -21,8 +21,30 @@ The maintenance mode can be enabled in the manage view of the bridge
 Installing the bridge
 ---------------------
 
-Install pyramid and ``ftw.bridge.proxy`` and configure the bridge in the
-pyramid ``.ini`` configuration file::
+Install ``ftw.bridge.proxy`` using buildout:
+
+    [buildout]
+    extends = https://raw.github.com/4teamwork/ftw.bridge.proxy/master/versions.cfg
+
+    parts =
+        pyramid
+        serve
+
+    [pyramid]
+    recipe = zc.recipe.egg
+    dependent-scripts = true
+    interprenter = py
+    eggs =
+        ftw.bridge.proxy
+        Paste
+
+    [serve]
+    recipe = collective.recipe.scriptgen
+    cmd = ${buildout:directory}/bin/pserve
+    arguments = ${buildout:directory}/pyramid.ini
+
+Replace the path to the pyramid.ini configuration file on the last line, if necessary.
+Here is an example ``pyramid.ini`` configuration file for running the server with paster:
 
     [app:main]
     use = egg:ftw.bridge.proxy
@@ -38,6 +60,11 @@ pyramid ``.ini`` configuration file::
 
     bridge.admin.username = admin
     bridge.admin.password = secret
+
+    [server:main]
+    use = egg:Paste#http
+    host = 0.0.0.0
+    port = 8000
 
 
 Installing the plone addon
