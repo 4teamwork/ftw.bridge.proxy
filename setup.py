@@ -47,6 +47,8 @@ setup(name='ftw.bridge.proxy',
           'pyramid',
           'pyramid_zcml',
           'zope.component',
+          'zope.interface',
+          'WebOb',
           'requests',
       ],
 
