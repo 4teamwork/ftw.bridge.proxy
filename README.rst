@@ -21,7 +21,7 @@ The maintenance mode can be enabled in the manage view of the bridge
 Installing the bridge
 ---------------------
 
-Install ``ftw.bridge.proxy`` using buildout:
+Install ``ftw.bridge.proxy`` using buildout::
 
     [buildout]
     extends = https://raw.github.com/4teamwork/ftw.bridge.proxy/master/versions.cfg
@@ -44,7 +44,7 @@ Install ``ftw.bridge.proxy`` using buildout:
     arguments = ${buildout:directory}/pyramid.ini
 
 Replace the path to the pyramid.ini configuration file on the last line, if necessary.
-Here is an example ``pyramid.ini`` configuration file for running the server with paster:
+Here is an example ``pyramid.ini`` configuration file for running the server with paster::
 
     [app:main]
     use = egg:ftw.bridge.proxy
