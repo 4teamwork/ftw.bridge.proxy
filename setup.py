@@ -25,7 +25,7 @@ setup(name='ftw.bridge.proxy',
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        'Framework :: Pylons',
+        'Framework :: Pyramid',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
         ],
