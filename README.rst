@@ -6,6 +6,12 @@ requests between multiple plone instances. It's purpose is to isolate the
 plone instances by routing through this proxy. This allows to easily move
 plone instances to other servers.
 
+.. figure:: http://onegov.ch/approved.png/image
+   :align: right
+   :target: http://onegov.ch/community/zertifizierte-module/ftw.bridge
+
+   Certified: 01/2013
+
 
 Maintenance mode
 ----------------
