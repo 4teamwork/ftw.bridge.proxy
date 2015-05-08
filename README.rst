@@ -85,9 +85,9 @@ from the bridge and providing tools for making requests. See the readme of
 Links
 -----
 
-- Main github project repository: https://github.com/4teamwork/ftw.bridge.proxy
-- Issue tracker: https://github.com/4teamwork/ftw.bridge.proxy/issues
-- Package on pypi: http://pypi.python.org/pypi/ftw.bridge.proxy
+- Github: https://github.com/4teamwork/ftw.bridge.proxy
+- Issues: https://github.com/4teamwork/ftw.bridge.proxy/issues
+- Pypi: http://pypi.python.org/pypi/ftw.bridge.proxy
 - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.bridge.proxy
 
 
